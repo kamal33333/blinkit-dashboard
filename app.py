@@ -9,7 +9,7 @@ st.set_page_config(page_title="Blinkit Master Analytics", page_icon="📊", layo
 st.title("📊 Blinkit Sales & Inventory Master")
 
 # ==========================================
-# 1. SMART LOADERS
+# 1. SMART LOADERS (Fixes your 'raw' sheet error)
 # ==========================================
 @st.cache_data
 def load_smart_sales(file):
@@ -69,10 +69,12 @@ def load_smart_inventory(file):
         target_sheet = None
         header_row_idx = 0
         
+        # Loop through ALL sheets to find the one with data
         for sheet in xl.sheet_names:
             df_preview = pd.read_excel(file, sheet_name=sheet, header=None, nrows=10)
             for idx, row in df_preview.iterrows():
                 row_vals = row.astype(str).str.strip().tolist()
+                # We identify the correct sheet by looking for these specific columns
                 if 'Item Name' in row_vals and 'Total sellable' in row_vals:
                     target_sheet = sheet
                     header_row_idx = idx
@@ -84,6 +86,7 @@ def load_smart_inventory(file):
             st.error("❌ Could not find Inventory data (looking for 'Item Name' & 'Total sellable').")
             return None
 
+        # Load the identified sheet
         df = pd.read_excel(file, sheet_name=target_sheet, header=header_row_idx)
         df.columns = df.columns.str.strip()
         
