@@ -11,7 +11,7 @@ import plotly.express as px
 st.set_page_config(page_title="Blinkit Master Analytics", page_icon="📊", layout="wide")
 
 # PASSWORD SYSTEM
-PASSWORD = "kressa_admin"  # <--- Change this if you want
+PASSWORD = "kamal_blinkit"  # <--- Change this if you want
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
